@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+ <!DOCTYPE html>
 <html lang="it">
 <head>
     <meta charset="UTF-8">
@@ -77,9 +77,6 @@
         <option value="">Seleziona un comune</option>
     </select>
 
-    <label for="giorno">Scegli la giornata:</label>
-    <input type="date" id="giorno" name="giorno">
-
     <button id="carica">Carica Previsioni</button>
 
     <div id="scrollable-container">
@@ -153,7 +150,6 @@
 
         document.getElementById('carica').addEventListener('click', () => {
             const comune = document.getElementById('comune').value;
-            const giorno = document.getElementById('giorno').value;
 
             const urls = {
                 ilMeteo: `https://www.ilmeteo.it/meteo/${comune}`,
