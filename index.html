@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Confronto Previsioni Meteo</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+        th, td {
+            border: 1px solid #ccc;
+            padding: 10px;
+            text-align: left;
+        }
+        th {
+            background-color: #eee;
+        }
+        h1 {
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <h1>Confronto Previsioni Meteo</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>Giorno</th>
+                <th>Il Meteo</th>
+                <th>3BMeteo</th>
+                <th>Meteo.it</th>
+                <th>MeteoAM</th>
+                <th>Weather.com</th>
+            </tr>
+        </thead>
+        <tbody id="meteo-tbody">
+            <!-- I dati delle previsioni meteo saranno inseriti qui tramite JavaScript -->
+        </tbody>
+    </table>
+    <script>
+        const proxyUrl = 'https://cors-anywhere.herokuapp.com/';
+        const urls = {
+            ilMeteo: proxyUrl + 'https://www.ilmeteo.it',
+            treBMeteo: proxyUrl + 'https://www.3bmeteo.com',
+            meteoIt: proxyUrl + 'https://www.meteo.it',
+            meteoAM: proxyUrl + 'https://www.meteoam.it',
+            weatherCom: proxyUrl + 'https://weather.com/it-IT'
+        };
+
+        async function fetchHTML(url) {
+            const response = await fetch(url);
+            const text = await response.text();
+            const parser = new DOMParser();
+            return parser.parseFromString(text, 'text/html');
+        }
+
+        async function getWeatherData() {
+            const weatherData = {};
+
+            for (const [key, url] of Object.entries(urls)) {
+                try {
+                    const doc = await fetchHTML(url);
+                    // Qui dovresti adattare il codice per selezionare gli elementi corretti dal documento HTML
+                    weatherData[key] = [...doc.querySelectorAll('.forecast')]
+                        .map(forecast => ({
+                            giorno: forecast.querySelector('.day').innerText,
+                            previsione: forecast.querySelector('.temperature').innerText
+                        }));
+                } catch (error) {
+                    console.error(`Errore nel recupero dei dati da ${url}:`, error);
+                }
+            }
+
+            return weatherData;
+        }
+
+        document.addEventListener('DOMContentLoaded', async () => {
+            try {
+                const weatherData = await getWeatherData();
+                const tbody = document.getElementById('meteo-tbody');
+
+                const giorni = weatherData.ilMeteo.map((previsione, index) => {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td>${previsione.giorno}</td>
+                        <td>${weatherData.ilMeteo[index].previsione}</td>
+                        <td>${weatherData.treBMeteo[index]?.previsione || 'N/A'}</td>
+                        <td>${weatherData.meteoIt[index]?.previsione || 'N/A'}</td>
+                        <td>${weatherData.meteoAM[index]?.previsione || 'N/A'}</td>
+                        <td>${weatherData.weatherCom[index]?.previsione || 'N/A'}</td>
+                    `;
+                    return row;
+                });
+
+                giorni.forEach(giorno => tbody.appendChild(giorno));
+            } catch (error) {
+                console.error('Errore:', error);
+            }
+        });
+    </script>
+</body>
+</html>
