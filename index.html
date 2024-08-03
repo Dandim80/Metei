@@ -60,21 +60,12 @@
 <body>
     <h1>Confronto Previsioni Meteo</h1>
 
-    <label for="regione">Scegli la regione:</label>
-    <select id="regione">
-        <option value="">Seleziona una regione</option>
-        <option value="veneto">Veneto</option>
-        <!-- Aggiungi altre regioni se necessario -->
-    </select>
-
-    <label for="provincia">Scegli la provincia:</label>
-    <select id="provincia" disabled>
-        <option value="">Seleziona una provincia</option>
-    </select>
-
     <label for="comune">Scegli il comune:</label>
-    <select id="comune" disabled>
-        <option value="">Seleziona un comune</option>
+    <select id="comune">
+        <option value="caorle">Caorle</option>
+        <option value="vicenza">Vicenza</option>
+        <option value="barbarano-vicentino">Barbarano</option>
+        <option value="mossano">Mossano</option>
     </select>
 
     <button id="carica">Carica Previsioni</button>
@@ -92,62 +83,6 @@
     </div>
 
     <script>
-        const province = {
-            veneto: {
-                "verona": ["Verona", "Bardolino", "Legnago"],
-                "vicenza": ["Vicenza", "Arzignano", "Schio"],
-                "padova": ["Padova", "Abano Terme", "Cittadella"],
-                "treviso": ["Treviso", "Conegliano", "Montebelluna"],
-                "belluno": ["Belluno", "Feltre", "Sedico"],
-                "rovigo": ["Rovigo", "Adria", "Badia Polesine"],
-                "venezia": ["Venezia", "Mestre", "Caorle"]
-            }
-        };
-
-        document.getElementById('regione').addEventListener('change', (event) => {
-            const regione = event.target.value;
-            const provinciaSelect = document.getElementById('provincia');
-            const comuneSelect = document.getElementById('comune');
-
-            provinciaSelect.innerHTML = '<option value="">Seleziona una provincia</option>';
-            comuneSelect.innerHTML = '<option value="">Seleziona un comune</option>';
-
-            if (regione && province[regione]) {
-                provinciaSelect.disabled = false;
-
-                for (const [provinciaCode, comuni] of Object.entries(province[regione])) {
-                    const option = document.createElement('option');
-                    option.value = provinciaCode;
-                    option.textContent = provinciaCode.charAt(0).toUpperCase() + provinciaCode.slice(1);
-                    provinciaSelect.appendChild(option);
-                }
-            } else {
-                provinciaSelect.disabled = true;
-                comuneSelect.disabled = true;
-            }
-        });
-
-        document.getElementById('provincia').addEventListener('change', (event) => {
-            const regione = document.getElementById('regione').value;
-            const provincia = event.target.value;
-            const comuneSelect = document.getElementById('comune');
-
-            comuneSelect.innerHTML = '<option value="">Seleziona un comune</option>';
-
-            if (regione && provincia && province[regione] && province[regione][provincia]) {
-                comuneSelect.disabled = false;
-
-                province[regione][provincia].forEach(comune => {
-                    const option = document.createElement('option');
-                    option.value = comune.toLowerCase().replace(/ /g, '-');
-                    option.textContent = comune;
-                    comuneSelect.appendChild(option);
-                });
-            } else {
-                comuneSelect.disabled = true;
-            }
-        });
-
         document.getElementById('carica').addEventListener('click', () => {
             const comune = document.getElementById('comune').value;
 
