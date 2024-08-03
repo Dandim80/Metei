@@ -14,30 +14,22 @@
         h1 {
             text-align: center;
             margin: 20px 0;
+            font-size: 24px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            background-color: #007bff;
+            color: white;
+            padding: 10px;
         }
         select, button {
             margin-bottom: 20px;
             display: block;
             margin: 10px auto;
         }
-        .iframe-container {
-            width: 100%;
-            height: 800px;
-            overflow: hidden;
-            border: none;
-            margin-bottom: 20px;
-            padding: 0;
-        }
-        .iframe-container iframe {
-            width: 100%;
-            height: 100%;
-            border: none;
-            margin: 0;
-            padding: 0;
-        }
         #scrollable-container {
-            max-height: 800px; /* Ridotto per adattarsi meglio */
-            overflow-y: scroll;
+            max-height: 560px; /* Ridotto del 30% rispetto ai 800px precedenti */
+            overflow-y: auto; /* Abilita lo scroll verticale */
             overflow-x: hidden; /* Rimuove lo scroll orizzontale */
             border: 1px solid #ddd;
             padding: 10px;
@@ -59,6 +51,19 @@
         }
         #scrollable-container::-webkit-scrollbar-thumb:hover {
             background: #0056b3; /* Colore del cursore quando si passa sopra */
+        }
+        .iframe-container {
+            width: 100%; /* Gli iframe occupano tutta la larghezza disponibile */
+            height: 560px; /* Altezza ridotta del 30% rispetto ai 800px precedenti */
+            box-sizing: border-box; /* Include padding e border nella larghezza e altezza */
+            margin-bottom: 20px; /* Spazio tra gli iframe */
+        }
+        .iframe-container iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+            margin: 0;
+            padding: 0;
         }
         .link-to-top {
             display: block;
