@@ -8,11 +8,12 @@
         body {
             font-family: Arial, sans-serif;
             margin: 0;
-            padding: 20px;
+            padding: 0;
             background-color: #f5f5f5;
         }
         h1 {
             text-align: center;
+            margin: 20px 0;
         }
         select, button {
             margin-bottom: 20px;
@@ -21,39 +22,54 @@
         }
         .iframe-container {
             width: 100%;
-            height: 1200px; /* Raddoppiato da 600px a 1200px */
+            height: 800px;
             overflow: hidden;
             border: none;
             margin-bottom: 20px;
+            padding: 0;
         }
         .iframe-container iframe {
             width: 100%;
             height: 100%;
             border: none;
+            margin: 0;
+            padding: 0;
         }
         #scrollable-container {
-            max-height: 1600px; /* Raddoppiato da 800px a 1600px */
+            max-height: 800px; /* Ridotto per adattarsi meglio */
             overflow-y: scroll;
+            overflow-x: hidden; /* Rimuove lo scroll orizzontale */
             border: 1px solid #ddd;
             padding: 10px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            display: flex;
-            flex-direction: column;
-            scrollbar-width: thin; /* Per Firefox */
-            scrollbar-color: #888 #f5f5f5; /* Per Firefox */
+            scrollbar-width: thin;
+            scrollbar-color: #007bff #f5f5f5;
+            margin: 0;
         }
         #scrollable-container::-webkit-scrollbar {
-            width: 12px; /* Larghezza della barra di scorrimento */
+            width: 24px; /* Maggiore larghezza della scrollbar */
         }
         #scrollable-container::-webkit-scrollbar-track {
-            background: #f5f5f5; /* Colore dello sfondo della pista della barra di scorrimento */
+            background: #f5f5f5; /* Colore dello sfondo della scrollbar */
         }
         #scrollable-container::-webkit-scrollbar-thumb {
-            background: #888; /* Colore della barra di scorrimento */
-            border-radius: 10px; /* Angoli arrotondati della barra di scorrimento */
+            background: #007bff; /* Colore del cursore della scrollbar */
+            border-radius: 12px; /* Aumenta l'arrotondamento degli angoli */
+            border: 6px solid #f5f5f5; /* Spazio tra il cursore e il bordo della scrollbar */
         }
         #scrollable-container::-webkit-scrollbar-thumb:hover {
-            background: #555; /* Colore della barra di scorrimento al passaggio del mouse */
+            background: #0056b3; /* Colore del cursore quando si passa sopra */
+        }
+        .link-to-top {
+            display: block;
+            margin: 10px auto;
+            text-align: center;
+            font-size: 16px;
+            color: #007bff;
+            text-decoration: none;
+        }
+        .link-to-top:hover {
+            text-decoration: underline;
         }
     </style>
 </head>
@@ -64,11 +80,14 @@
     <select id="comune">
         <option value="caorle">Caorle</option>
         <option value="vicenza">Vicenza</option>
-        <option value="barbarano-vicentino">Barbarano</option>
-        <option value="mossano">Mossano</option>
+        <option value="barbarano-vicentino">Barbarano Mossano</option>
     </select>
 
     <button id="carica">Carica Previsioni</button>
+
+    <a href="#iframe-ilmeteo" class="link-to-top">Vai all'inizio del sito IlMeteo</a>
+    <a href="#iframe-3bmeteo" class="link-to-top">Vai all'inizio del sito 3BMeteo</a>
+    <a href="#iframe-meteoam" class="link-to-top">Vai all'inizio del sito MeteoAM</a>
 
     <div id="scrollable-container">
         <div class="iframe-container" id="iframe-ilmeteo">
@@ -83,13 +102,27 @@
     </div>
 
     <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const comune = "caorle";
+            caricaPrevisioni(comune);
+        });
+
         document.getElementById('carica').addEventListener('click', () => {
             const comune = document.getElementById('comune').value;
+            caricaPrevisioni(comune);
+        });
 
+        function caricaPrevisioni(comune) {
             const urls = {
-                ilMeteo: `https://www.ilmeteo.it/meteo/${comune}`,
-                treBMeteo: `https://www.3bmeteo.com/meteo/${comune}`,
-                meteoAM: `https://www.meteoam.it/it/meteo-citta/${comune}`
+                ilMeteo: comune === "barbarano-vicentino" 
+                    ? "https://www.ilmeteo.it/meteo/Barbarano+Vicentino" 
+                    : `https://www.ilmeteo.it/meteo/${comune}`,
+                treBMeteo: comune === "barbarano-vicentino" 
+                    ? "https://www.3bmeteo.com/meteo/barbarano+vicentino" 
+                    : `https://www.3bmeteo.com/meteo/${comune}`,
+                meteoAM: comune === "barbarano-vicentino"
+                    ? "https://www.meteoam.it/it/meteo-citta/barbarano-mossano"
+                    : `https://www.meteoam.it/it/meteo-citta/${comune}`
             };
 
             document.getElementById('iframe-ilmeteo-frame').src = urls.ilMeteo;
@@ -97,7 +130,7 @@
             document.getElementById('iframe-meteoam-frame').src = urls.meteoAM;
 
             document.getElementById('scrollable-container').scrollTop = 0;
-        });
+        }
     </script>
 </body>
 </html>
