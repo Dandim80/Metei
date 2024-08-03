@@ -27,6 +27,28 @@
             display: block;
             margin: 10px auto;
         }
+        .fixed-links {
+            background-color: #f5f5f5;
+            z-index: 1000;
+            padding: 10px 0;
+            text-align: center;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            width: 100%;
+        }
+        .fixed-links a {
+            margin: 0 15px;
+            font-size: 16px;
+            color: #007bff;
+            text-decoration: none;
+        }
+        .fixed-links a:hover {
+            text-decoration: underline;
+        }
+        .sticky {
+            position: fixed;
+            top: 0;
+            left: 0;
+        }
         #scrollable-container {
             max-height: 560px; /* Ridotto del 30% rispetto ai 800px precedenti */
             overflow-y: auto; /* Abilita lo scroll verticale */
@@ -36,7 +58,7 @@
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
             scrollbar-width: thin;
             scrollbar-color: #007bff #f5f5f5;
-            margin: 0;
+            margin-top: 20px; /* Spazio per il header */
         }
         #scrollable-container::-webkit-scrollbar {
             width: 24px; /* Maggiore larghezza della scrollbar */
@@ -65,17 +87,6 @@
             margin: 0;
             padding: 0;
         }
-        .link-to-top {
-            display: block;
-            margin: 10px auto;
-            text-align: center;
-            font-size: 16px;
-            color: #007bff;
-            text-decoration: none;
-        }
-        .link-to-top:hover {
-            text-decoration: underline;
-        }
     </style>
 </head>
 <body>
@@ -90,9 +101,11 @@
 
     <button id="carica">Carica Previsioni</button>
 
-    <a href="#iframe-ilmeteo" class="link-to-top">Vai all'inizio del sito IlMeteo</a>
-    <a href="#iframe-3bmeteo" class="link-to-top">Vai all'inizio del sito 3BMeteo</a>
-    <a href="#iframe-meteoam" class="link-to-top">Vai all'inizio del sito MeteoAM</a>
+    <div class="fixed-links" id="links">
+        <a href="#iframe-ilmeteo">Vai all'inizio del sito IlMeteo</a>
+        <a href="#iframe-3bmeteo">Vai all'inizio del sito 3BMeteo</a>
+        <a href="#iframe-meteoam">Vai all'inizio del sito MeteoAM</a>
+    </div>
 
     <div id="scrollable-container">
         <div class="iframe-container" id="iframe-ilmeteo">
@@ -136,6 +149,20 @@
 
             document.getElementById('scrollable-container').scrollTop = 0;
         }
+
+        window.addEventListener('scroll', () => {
+            const links = document.getElementById('links');
+            const scrollableContainer = document.getElementById('scrollable-container');
+            const sticky = links.offsetTop;
+
+            if (window.pageYOffset >= sticky) {
+                links.classList.add('sticky');
+                scrollableContainer.style.marginTop = `${links.offsetHeight}px`;
+            } else {
+                links.classList.remove('sticky');
+                scrollableContainer.style.marginTop = '20px';
+            }
+        });
     </script>
 </body>
 </html>
