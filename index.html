@@ -27,7 +27,7 @@
             display: block;
             margin: 10px auto;
         }
-        .fixed-links {
+        .links {
             background-color: #f5f5f5;
             z-index: 1000;
             padding: 10px 0;
@@ -35,19 +35,29 @@
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
             width: 100%;
         }
-        .fixed-links a {
-            margin: 0 15px;
+        .links a {
+            display: block; /* I link sono disposti uno sotto l'altro */
+            margin: 10px 0;
             font-size: 16px;
             color: #007bff;
             text-decoration: none;
         }
-        .fixed-links a:hover {
+        .links a:hover {
             text-decoration: underline;
+        }
+        .links .credits {
+            margin-top: 10px;
+            font-size: 14px;
+            color: #555;
         }
         .sticky {
             position: fixed;
             top: 0;
             left: 0;
+            width: 100%;
+        }
+        .spacer {
+            height: 0; /* Altezza riservata per evitare la sovrapposizione */
         }
         #scrollable-container {
             max-height: 560px; /* Ridotto del 30% rispetto ai 800px precedenti */
@@ -101,10 +111,11 @@
 
     <button id="carica">Carica Previsioni</button>
 
-    <div class="fixed-links" id="links">
+    <div class="links" id="links">
         <a href="#iframe-ilmeteo">Vai all'inizio del sito IlMeteo</a>
         <a href="#iframe-3bmeteo">Vai all'inizio del sito 3BMeteo</a>
         <a href="#iframe-meteoam">Vai all'inizio del sito MeteoAM</a>
+        <div class="credits">by DDM Soluzioni</div>
     </div>
 
     <div id="scrollable-container">
@@ -152,15 +163,15 @@
 
         window.addEventListener('scroll', () => {
             const links = document.getElementById('links');
-            const scrollableContainer = document.getElementById('scrollable-container');
             const sticky = links.offsetTop;
+            const headerHeight = document.querySelector('h1').offsetHeight + document.querySelector('select').offsetHeight + document.querySelector('button').offsetHeight + 40; // Altezza totale di h1, select e button
 
-            if (window.pageYOffset >= sticky) {
+            if (window.pageYOffset >= headerHeight) {
                 links.classList.add('sticky');
-                scrollableContainer.style.marginTop = `${links.offsetHeight}px`;
+                links.style.top = '0'; // Setta la posizione in alto
             } else {
                 links.classList.remove('sticky');
-                scrollableContainer.style.marginTop = '20px';
+                links.style.top = ''; // Reset della posizione
             }
         });
     </script>
